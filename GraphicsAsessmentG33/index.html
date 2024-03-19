@@ -68,7 +68,7 @@
 				scene.background = new THREE.Color(0x0762ad);
 				var ratio = window.innerWidth / window.innerHeight;
 				camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
-				camera.position.set(0, 5, 5);
+				camera.position.set(0, 10, 10); 
 
 				//Renderer
 				renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -81,16 +81,84 @@
 				controls.dampingFactor = 0.25;
 				controls.screenSpacePanning = false;
 
-                //cube
-                const geometry = new THREE.BoxGeometry(); // Defaults to 1x1x1
-                const material = new THREE.MeshBasicMaterial({color: 'blue'});
-                const cube = new THREE.Mesh(geometry, material);
-                scene.add(cube);
+				// Add the roundish island to the scene
+				const island = createRoundishIsland();
+				scene.add(island); // Don't forget to add the island to the scene
 
+				// Lighting
+				const light = new THREE.DirectionalLight(0xffffff, 1);
+				light.position.set(0, 100, 0);
+				scene.add(light);
 
-				
+				const cube = createSimpleCube();
+				scene.add(cube);
+
 			}
+
+			function createSimpleCube() {
+				// Define the geometry for a cube (size of 1x1x1)
+				const geometry = new THREE.BoxGeometry(1, 1, 1);
+
+				// Define the material, basic color without lighting
+				const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green color
+
+				// Create a mesh with the geometry and material
+				const cube = new THREE.Mesh(geometry, material);
+
+				// Return the cube mesh
+				return cube;
+			}
+
 			
+			function createRoundishIsland() {
+				// Start with a Cylinder Geometry, which has a circular top when viewed from above
+				const radiusTop = 5; // Radius of the top circle
+				const radiusBottom = 0.1; // Almost a point
+				const height = 6; // Height of the island
+				const radialSegments = 32; // Number of segmented faces around the circumference of the cylinder
+
+				const geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments, 1, false);
+
+				// Access the position attribute of the geometry
+				const positions = geometry.attributes.position;
+
+				// Flatten the bottom vertices to form a point
+				const bottomVertexIndex = []; // Store the indexes of the bottom vertices
+				const bottomY = -height * 0.5; // The bottom Y position for the vertices
+
+				for (let i = 0; i < positions.count; i++) {
+					const y = positions.getY(i);
+					if (y === bottomY) {
+						bottomVertexIndex.push(i);
+					}
+				}
+
+				// Calculate the center point of the bottom vertices
+				let bottomCenter = new THREE.Vector3(0, bottomY, 0);
+				for (let i of bottomVertexIndex) {
+					positions.setXYZ(i, bottomCenter.x, bottomCenter.y, bottomCenter.z);
+				}
+
+				positions.needsUpdate = true; // Notify Three.js to update the position buffer
+
+				geometry.computeVertexNormals(); // Update the normals for the lighting
+
+				// Material with flat shading to enhance the low-poly style
+				const material = new THREE.MeshPhongMaterial({ color: 0x77ff77, flatShading: true });
+
+				// Create the mesh
+				const island = new THREE.Mesh(geometry, material);
+
+				// Adjust the rotation of the mesh so the top is facing upwards
+				island.rotation.x = -Math.PI / 2;
+
+				return island;
+			}
+
+			
+
+
+
 
 
 			function onWindowResize() {
@@ -103,7 +171,7 @@
 				requestAnimationFrame(animate);
 				controls.update();
 				renderer.render(scene, camera);
-				}
+			}
 
 				
 
