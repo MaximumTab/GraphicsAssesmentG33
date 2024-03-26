@@ -67,8 +67,11 @@
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color(0x0762ad);
 				var ratio = window.innerWidth / window.innerHeight;
+
+				//Add Camera
 				camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
-				camera.position.set(0, 30, 10); 
+				camera.position.set(0, 15, 50); 
+				camera.lookAt(new THREE.Vector3(0, 0, 0));
 
 				//Add Renderer
 				renderer = new THREE.WebGLRenderer({ antialias: true });
