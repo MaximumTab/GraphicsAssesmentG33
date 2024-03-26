@@ -1,6 +1,6 @@
 <html>
 	<head>
-		<title>EpicMountainGenerator</title>
+		<title>The isle</title>
 		<style>
 			body{
 				margin: 0;
@@ -68,7 +68,7 @@
 				scene.background = new THREE.Color(0x0762ad);
 				var ratio = window.innerWidth / window.innerHeight;
 				camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
-				camera.position.set(0, 10, 10); 
+				camera.position.set(0, 30, 10); 
 
 				//Renderer
 				renderer = new THREE.WebGLRenderer({ antialias: true });
@@ -82,13 +82,20 @@
 				controls.screenSpacePanning = false;
 
 				// Add the roundish island to the scene
-				const island = createRoundishIsland();
+				const island = createComplexFloatingIsland();
 				scene.add(island); // Don't forget to add the island to the scene
 
 				// Lighting
 				const light = new THREE.DirectionalLight(0xffffff, 1);
-				light.position.set(0, 100, 0);
+				light.position.set(0, 100, 100);
 				scene.add(light);
+
+				const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+				light.position.set(0, -100, 0);
+				scene.add(light2);
+
+				const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+				scene.add(ambientLight);
 
 				const cube = createSimpleCube();
 				scene.add(cube);
@@ -110,49 +117,69 @@
 			}
 
 			
-			function createRoundishIsland() {
-				// Start with a Cylinder Geometry, which has a circular top when viewed from above
-				const radiusTop = 5; // Radius of the top circle
-				const radiusBottom = 0.1; // Almost a point
-				const height = 6; // Height of the island
-				const radialSegments = 32; // Number of segmented faces around the circumference of the cylinder
-
-				const geometry = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments, 1, false);
+			function createComplexFloatingIsland() {
+				// Create an icosahedron geometry as the base for the island
+				const baseGeometry = new THREE.IcosahedronGeometry(10, 4); // Radius and detail
 
 				// Access the position attribute of the geometry
-				const positions = geometry.attributes.position;
+				const positions = baseGeometry.attributes.position;
+				const verticesCount = positions.count;
 
-				// Flatten the bottom vertices to form a point
-				const bottomVertexIndex = []; // Store the indexes of the bottom vertices
-				const bottomY = -height * 0.5; // The bottom Y position for the vertices
+				// Temporary vector for manipulating vertex positions
+				const vertex = new THREE.Vector3();
 
-				for (let i = 0; i < positions.count; i++) {
-					const y = positions.getY(i);
-					if (y === bottomY) {
-						bottomVertexIndex.push(i);
+				// Compute the max and min height of vertices to scale the displacement accordingly
+				let maxHeight = 0;
+				let minHeight = Infinity;
+				for (let i = 0; i < verticesCount; i++) {
+					vertex.fromBufferAttribute(positions, i);
+					if (vertex.y > maxHeight) maxHeight = vertex.y;
+					if (vertex.y < minHeight) minHeight = vertex.y;
+				}
+				
+				// Set a level where the top of the island should be flattened
+				const flattenLevel = maxHeight * 0.5;
+
+				// Modify vertices to create the island shape
+				for (let i = 0; i < verticesCount; i++) {
+					vertex.fromBufferAttribute(positions, i);
+
+					// Calculate the relative height of the vertex within the island
+					const relativeHeight = (vertex.y - minHeight) / (maxHeight - minHeight);
+
+					// Displace vertices outwards more as they are higher up
+					const displacement = relativeHeight * 2; // Adjust this factor to affect the "bulge" of the island
+					
+					vertex.x *= 1 + displacement;
+					vertex.z *= 1 + displacement;
+
+					// Flatten the top of the island
+					if (vertex.y > flattenLevel) {
+						vertex.y = flattenLevel + (vertex.y - flattenLevel) * 0.1;
 					}
+
+					// Apply the modified position back to the geometry
+					positions.setXYZ(i, vertex.x, vertex.y, vertex.z);
 				}
 
-				// Calculate the center point of the bottom vertices
-				let bottomCenter = new THREE.Vector3(0, bottomY, 0);
-				for (let i of bottomVertexIndex) {
-					positions.setXYZ(i, bottomCenter.x, bottomCenter.y, bottomCenter.z);
-				}
+				// Notify Three.js that the position buffer needs to be updated
+				positions.needsUpdate = true;
 
-				positions.needsUpdate = true; // Notify Three.js to update the position buffer
+				// Recalculate normals for the lighting after modifying the geometry
+				baseGeometry.computeVertexNormals();
 
-				geometry.computeVertexNormals(); // Update the normals for the lighting
+				// Create a mesh with the modified geometry and a simple gray material
+				const islandMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 }); // Medium gray
+				const island = new THREE.Mesh(baseGeometry, islandMaterial);
 
-				// Material with flat shading to enhance the low-poly style
-				const material = new THREE.MeshPhongMaterial({ color: 0x77ff77, flatShading: true });
+				// Position the island to float
+				island.position.y = 5; // Adjust height as needed
 
-				// Create the mesh
-				const island = new THREE.Mesh(geometry, material);
+				// Add the island to the scene
+				scene.add(island);
 
-				// Adjust the rotation of the mesh so the top is facing upwards
-				island.rotation.x = -Math.PI / 2;
-
-				return island;
+				
+				
 			}
 
 			
