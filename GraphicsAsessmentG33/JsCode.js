@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from './build/controls/OrbitControls.js';
 
 var camera, scene, renderer, controls;
+var approximateFlatTopY = 10;
 
 init();
 animate();
@@ -52,7 +53,8 @@ function init() {
     scene.add(cube);
 
     //Add Items 
-    placeItemOnIslandWithRaycasting(island, cube, scene);
+    placeCubeOnTopOfIsland(island, cube);
+
 
 }
 
@@ -123,43 +125,30 @@ function createComplexFloatingIsland() {
     // Position the island to float
     island.position.y = 5; // Adjust height as needed
 
+    approximateFlatTopY = flattenLevel + (maxHeight - flattenLevel) * 0.1;
+    console.log(approximateFlatTopY);
+
     // Return the mesh (island)
     return island;
+   
+   
 }
 
 
-function placeItemOnIslandWithRaycasting(island, item, scene) { 														//Does not work yet
-    // Raycaster to find the top surface of the island
-    const raycaster = new THREE.Raycaster();
-    
-    // Compute bounding box of the island geometry to find the highest Y position
-    island.geometry.computeBoundingBox();
-    const highestPoint = island.geometry.boundingBox.max.y;
+function placeCubeOnTopOfIsland(island, cube) {
 
-    // Start the ray from well above the highest point of the island, looking down
-    const startPosition = new THREE.Vector3(island.position.x, island.position.y + highestPoint + 100, island.position.z);
-    const direction = new THREE.Vector3(0, -1, 0); // Ray directed downwards
-    raycaster.set(startPosition, direction);
+    const flattenLevel = approximateFlatTopY; // This is the y position of the island's flat top.
 
-    // Check for intersections with the island
-    const intersections = raycaster.intersectObject(island, true); // use 'true' for recursive if island has children
+    const cubeHeight = 1; // Half the cube's height, since its position is based on the cube's center.
 
-    if (intersections.length > 0) {
-        // If there's an intersection, use the point directly
-        const intersectionPoint = intersections[0].point;
-        
-        // Offset the item by half its height to ensure it sits 'on' the surface, not 'in' it
-        // Compute the bounding box to get the height of the item
-        item.geometry.computeBoundingBox();
-        const itemHeight = item.geometry.boundingBox.getSize(new THREE.Vector3()).y;
+    const yOffset = cubeHeight / 2 + 0.1;
 
-        // Set the item's position to be on the intersected point
-        item.position.copy(intersectionPoint).add(new THREE.Vector3(0, itemHeight / 2, 0));
-
-        // Add the item to the scene
-        scene.add(item);
-    }
+    cube.position.set(0, flattenLevel + yOffset, 0);
 }
+
+
+
+
 
 
 
