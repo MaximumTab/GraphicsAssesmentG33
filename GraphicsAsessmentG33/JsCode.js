@@ -1,6 +1,7 @@
 
 import * as THREE from 'three';
-import {OrbitControls} from './build/controls/OrbitControls.js';
+import { OrbitControls } from './build/controls/OrbitControls.js';
+import { createTree } from './tree.js';
 
 var camera, scene, renderer, controls;
 var approximateFlatTopY = 10;
@@ -54,6 +55,10 @@ function init() {
 
     //Add Items 
     placeCubeOnTopOfIsland(island, cube);
+    const tree = createTree();
+    // Adjust the position of the tree to be on top of the island
+    tree.position.set(0, approximateFlatTopY + 5, 0); // Adjust Y based on the trunk's height and island's flat top
+    scene.add(tree);
 
 
 }
