@@ -1,7 +1,7 @@
-
 import * as THREE from 'three';
 import { OrbitControls } from './build/controls/OrbitControls.js';
 import { createTree } from './tree.js';
+import { createDayNightSlider, createSunAndMoon } from './daynight.js';
 
 var camera, scene, renderer, controls;
 var approximateFlatTopY = 10;
@@ -10,16 +10,22 @@ init();
 animate();
 onWindowResize();
 
+function printCameraPosition() {
+    console.log("Camera position:", camera.position.x, camera.position.y, camera.position.z);
+    requestAnimationFrame(printCameraPosition);
+}
 
+// Call the function to start printing the camera position
+printCameraPosition();
 function init() {
     //Add Scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0762ad);
+    scene.background = new THREE.Color(0x0064FF);
     var ratio = window.innerWidth / window.innerHeight;
 
     //Add Camera
     camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
-    camera.position.set(0, 15, 50); 
+    camera.position.set(0, 20, -100);
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     //Add Renderer
@@ -59,6 +65,11 @@ function init() {
     // Adjust the position of the tree to be on top of the island
     tree.position.set(0, approximateFlatTopY + 5, 0); // Adjust Y based on the trunk's height and island's flat top
     scene.add(tree);
+
+    // Create day-night slider
+    createDayNightSlider(scene); 
+    createSunAndMoon(scene)
+       
 
 
 }
