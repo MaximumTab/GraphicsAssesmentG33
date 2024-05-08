@@ -1,6 +1,11 @@
+
 import * as THREE from 'three';
 import { OrbitControls } from './build/controls/OrbitControls.js';
-import { createTree } from './tree.js';
+import { createOakTree } from './trees.js';
+import { createFirTree } from './trees.js';
+import { GLTFLoader } from './build/GLTFLoader.js';
+
+
 
 var camera, scene, renderer, controls;
 var approximateFlatTopY = 10;
@@ -9,22 +14,16 @@ init();
 animate();
 onWindowResize();
 
-function printCameraPosition() {
-    console.log("Camera position:", camera.position.x, camera.position.y, camera.position.z);
-    requestAnimationFrame(printCameraPosition);
-}
 
-// Call the function to start printing the camera position
-printCameraPosition();
 function init() {
     //Add Scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0064FF);
+    scene.background = new THREE.Color(0x0762ad);
     var ratio = window.innerWidth / window.innerHeight;
 
     //Add Camera
     camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
-    camera.position.set(0, 20, -100);
+    camera.position.set(0, 15, 50); 
     camera.lookAt(new THREE.Vector3(0, 0, 0));
 
     //Add Renderer
@@ -70,26 +69,53 @@ function init() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
 
-    //Add cube
-    const cube = createSimpleCube();
-    scene.add(cube);
+     // Adding trees
+     const firTree = createFirTree();
+     const oakTree = createOakTree();
+ 
+     firTree.position.set(-5, approximateFlatTopY + 5, 0);
+     scene.add(firTree);
+ 
+     oakTree.position.set(5, approximateFlatTopY + 5, 0);
+     scene.add(oakTree);
 
-    //Add Items 
-    placeCubeOnTopOfIsland(island, cube);
-    const tree = createTree();
-    // Adjust the position of the tree to be on top of the island
-    tree.position.set(0, approximateFlatTopY + 5, 0); // Adjust Y based on the trunk's height and island's flat top
-    scene.add(tree);
-
-
+     const gltfLoader = new GLTFLoader();
 }
 
-function createSimpleCube() {
-    // Define the geometry for a cube (size of 1x1x1)
-    const geometry = new THREE.BoxGeometry(1, 1, 1);
+function loadModel(modelPath, scale, modelName) {
+    const loader = new GLTFLoader();
+    loader.load(modelPath, function(gltf) {
+        const model = gltf.scene;
+        model.scale.set(scale, scale, scale);
+        model.position.copy(randomPositionOnGrass());
+        model.name = modelName; // Useful for debugging
+        scene.add(model);
+    });
+}
 
-    // Define the material, basic color without lighting
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00 }); // Green color
+function randomPositionOnGrass() {
+    const radius = 20; // Radius of the grass plane, adjust to match its actual size
+    let angle = Math.random() * Math.PI * 2; // Random angle
+    let r = radius * Math.sqrt(Math.random()); // Random distance from the center
+    let x = r * Math.cos(angle);
+    let z = r * Math.sin(angle);
+    return new THREE.Vector3(x, approximateFlatTopY + 5, z); // Adjust the Y position as needed
+}
+
+function addGrassOnIsland(island) {
+    const flattenLevel = approximateFlatTopY; // The flat top y-level of the island
+
+    // Increasing the segment count for finer detail
+    const topRadius = 21.5; // Adjust this value based on the actual size of the flat top of your island
+    const segments = 16; // Increased number of segments for a smooth circle
+    const height = 1; // The thickness of the grass layer
+
+    // Create a circular grass area with thickness
+    const grassGeometry = new THREE.CylinderGeometry(topRadius, topRadius, height, segments);
+    grassGeometry.rotateX(Math.PI / 1); // Rotate to lay flat like a disk
+
+    // Use a flat green color for the grass, making it appear as a uniform surface
+    var grassMaterial = new THREE.MeshLambertMaterial({ color: 0x2f6b37, side: THREE.DoubleSide });
 
     // Create the grass mesh
     const grass = new THREE.Mesh(grassGeometry, grassMaterial);
