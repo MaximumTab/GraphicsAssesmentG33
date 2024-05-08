@@ -1,31 +1,13 @@
 import * as THREE from 'three';
-import { OrbitControls } from '/node_modules/three/examples/jsm/controls/OrbitControls.js';
-import * as dat from '/node_modules/dat.gui/build/dat.gui.module.js';
 
-//Scene
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 
-//Camera
-const controls = new OrbitControls(camera, renderer.domElement);
-camera.position.set(0, 0, 15);
-
-//Lights
-const light = new THREE.DirectionalLight(0xffffff, 1);
-light.position.set(5, 5, 5);
-scene.add(light);
-scene.add(new THREE.AmbientLight(0xffffff, 0.5));
-
-// GUI
+/* GUI
 const gui = new dat.GUI();
 const settings = {
     treeType: 'Fir Tree'
-};
+};*/ 
 
-function createFirTree() {
+export function createFirTree() {
     const tree = new THREE.Group();
 
     //Material
@@ -55,7 +37,7 @@ function createFirTree() {
     return tree;
 }
 
-function createOakTree() {
+export function createOakTree() {
     const tree = new THREE.Group();
 
     //Material
@@ -77,7 +59,7 @@ function createOakTree() {
     return tree;
 }
 
-let currentTree = createFirTree();
+/*let currentTree = createFirTree();
 scene.add(currentTree);
 
 gui.add(settings, 'treeType', ['Fir Tree', 'Oak Tree']).onChange(value => {
@@ -96,4 +78,4 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-animate();
+animate();*/
