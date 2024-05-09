@@ -1,12 +1,8 @@
-import { createNoise2D } from './node_modules/simplex-noise';
 import * as THREE from 'three';
+import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
 
 
 
-
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 /*const gui = new GUI();
 const params = {
     amplitude: 5,
@@ -30,10 +26,11 @@ export function CreateLake(){
     updateTerrain();
     const material = new THREE.MeshPhongMaterial({ color: 0x964B00, wireframe: false });
     const lake = new THREE.Mesh(geometry, material);
-    lake.rotation.x = -Math.PI / 2;
     lake.add(createWater());
+    lake.rotation.x = -Math.PI / 2; // Rotate the lake to be horizontal
     const rocks = createRocks();
     rocks.forEach(rock => lake.add(rock));
+    
     return lake;
 }
     
@@ -41,8 +38,6 @@ export function CreateLake(){
 const noise = createNoise2D();
 // Assuming you have included simplex-noise or another noise library
 const geometry = new THREE.PlaneGeometry(10, 10, 100, 100); // Plane size: 10x10, subdivided into 100x100 segments
-const centerOffsetX = 5; // Center at half of the plane width
-const centerOffsetY = 5; // Center at half of the plane height
 const radius = 5; // Desired radius of the circular area
 const radiusSquared = radius * radius; // Square the radius for faster comparison// Maximum constant depth adjustment at the center
 const scale = 0.7;
@@ -72,6 +67,7 @@ function updateTerrain() {
 
     geometry.attributes.position.needsUpdate = true;
     geometry.computeVertexNormals(); // Necessary for proper shading and smoothing
+
     return geometry;
 }
 
@@ -90,7 +86,7 @@ function createRocks(){
         const rockGeometry = new THREE.SphereGeometry(rockRadius, 20, 20);
         const rockMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
         const rock = new THREE.Mesh(rockGeometry, rockMaterial);
-        rock.position.set(x, 0, z);
+        rock.position.set(z, x,0 );
         rocks.push(rock); // Add the rock to the array
     }
     
@@ -109,22 +105,7 @@ function createWater(){
     
     const water = new THREE.Mesh(waterGeometry, waterMaterial);
     water.position.set(0, 0.1, 0); // Centered and slightly above the lake bed to avoid z-fighting
-    water.rotation.x = -Math.PI / 2; // Rotate to lie flat
-    
-    scene.add(water);
+
+
     return water;
 }
-
-
-
-
-// Animation loop
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-    controls.update();
-
-    
-}
-
-animate();
