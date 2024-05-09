@@ -1,10 +1,9 @@
 
 import * as THREE from 'three';
-import { OrbitControls } from './build/controls/OrbitControls.js';
-import { createOakTree } from './trees.js';
-import { createFirTree } from './trees.js';
 import { GLTFLoader } from './build/GLTFLoader.js';
+import { OrbitControls } from './build/controls/OrbitControls.js';
 import { createDayNightSlider, createSunAndMoon } from './daynight.js';
+import { createFirTree, createOakTree } from './trees.js';
 
 
 
