@@ -1,14 +1,6 @@
 import { createNoise2D } from 'simplex-noise';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
-camera.position.set(30, 30, 100);
-
-const renderer = new THREE.WebGLRenderer();
-renderer.setSize(window.innerWidth, window.innerHeight);
-document.body.appendChild(renderer.domElement);
 /*const gui = new GUI();
 const params = {
     amplitude: 5,
@@ -41,7 +33,6 @@ export function CreateLake(){
     
 
 const noise = createNoise2D();
-// Assuming you have included simplex-noise or another noise library
 const geometry = new THREE.PlaneGeometry(10, 10, 100, 100); // Plane size: 10x10, subdivided into 100x100 segments
 const centerOffsetX = 5; // Center at half of the plane width
 const centerOffsetY = 5; // Center at half of the plane height
@@ -116,25 +107,3 @@ function createWater(){
     scene.add(water);
     return water;
 }
-// Lighting
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.set(-1, 1, 1);
-scene.add(directionalLight);
-
-// OrbitControls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.maxPolarAngle = Math.PI * 0.495;
-controls.target.set(0, 10, 0);
-controls.maxDistance = 200.0;
-controls.update();
-
-// Animation loop
-function animate() {
-    requestAnimationFrame(animate);
-    renderer.render(scene, camera);
-    controls.update();
-
-    
-}
-
-animate();
