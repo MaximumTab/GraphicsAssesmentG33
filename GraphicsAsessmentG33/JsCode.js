@@ -84,7 +84,7 @@ function init() {
      oakTree.position.set(5, approximateFlatTopY + 5, 0);
      scene.add(oakTree);
 
-     
+     const gltfLoader = new GLTFLoader();
 }
 
 function loadModel(modelPath, scale, modelName) {
