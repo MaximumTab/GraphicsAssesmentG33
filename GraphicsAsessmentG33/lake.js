@@ -1,10 +1,8 @@
-import { createNoise2D } from 'simplex-noise';
+import { createNoise2D } from './node_modules/simplex-noise';
 import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 1, 20000);
-camera.position.set(30, 30, 100);
+
+
 
 const renderer = new THREE.WebGLRenderer();
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -116,17 +114,9 @@ function createWater(){
     scene.add(water);
     return water;
 }
-// Lighting
-const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
-directionalLight.position.set(-1, 1, 1);
-scene.add(directionalLight);
 
-// OrbitControls
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.maxPolarAngle = Math.PI * 0.495;
-controls.target.set(0, 10, 0);
-controls.maxDistance = 200.0;
-controls.update();
+
+
 
 // Animation loop
 function animate() {

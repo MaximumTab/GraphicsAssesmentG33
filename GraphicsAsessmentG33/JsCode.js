@@ -5,6 +5,7 @@ import { createOakTree } from './trees.js';
 import { createFirTree } from './trees.js';
 import { GLTFLoader } from './build/GLTFLoader.js';
 import { createDayNightSlider, createSunAndMoon } from './daynight.js';
+import {CreateLake} from './lake.js';
 
 
 
@@ -84,7 +85,15 @@ function init() {
      oakTree.position.set(5, approximateFlatTopY + 5, 0);
      scene.add(oakTree);
 
-     const gltfLoader = new GLTFLoader();
+     //add lake+
+     const lake = CreateLake();
+     scene.add(lake);
+     lake.position.set(0, approximateFlatTopY + 5, 0);
+     
+     
+
+    
+     
 }
 
 function loadModel(modelPath, scale, modelName) {
