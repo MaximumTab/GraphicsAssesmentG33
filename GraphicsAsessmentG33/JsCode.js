@@ -6,6 +6,8 @@ import { createFirTree } from './trees.js';
 import { GLTFLoader } from './build/GLTFLoader.js';
 import { createDayNightSlider, createSunAndMoon } from './daynight.js';
 import {CreateLake} from './lake.js';
+import {createGrass}  from './grass.js';
+import {createIsland} from './island.js';
 
 
 
@@ -31,6 +33,7 @@ function init() {
     //Add Renderer
     renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.shadowMap.enabled = true;
     document.body.appendChild(renderer.domElement);
 
     //Add OrbitControls
@@ -40,15 +43,21 @@ function init() {
     controls.screenSpacePanning = false;
 
     // Add Island
-    const island = createComplexFloatingIsland();
-    scene.add(island); 
+    //const island = createComplexFloatingIsland();
+    //scene.add(island); 
 
     // Create day-night slider
     createDayNightSlider(scene); 
     createSunAndMoon(scene)
 
+    //Add island
+    const island = createIsland();
+    scene.add(island);
+
    /// Add grass on the island
-    addGrassOnIsland(island);
+    scene.add(createGrass(island));
+
+    
 
     // Load multiple models randomly placed on the grass
     const modelNames = ['grass1.glb', 'grass2.glb', 'grass3.glb']; // Assuming names of models
@@ -66,11 +75,14 @@ function init() {
     // Add Lighting
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(0, 100, 100);
+    light.castShadow = true;
+    light.shadow.mapSize.width = 1024;
+    light.shadow.mapSize.height = 1024;
     scene.add(light);
 
-    const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-    light.position.set(0, -100, 0);
-    scene.add(light2);
+    // const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    // light.position.set(0, -100, 0);
+    // scene.add(light2);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
@@ -79,16 +91,19 @@ function init() {
      const firTree = createFirTree();
      const oakTree = createOakTree();
  
-     firTree.position.set(-5, approximateFlatTopY + 5, 0);
+     firTree.position.set(-5, approximateFlatTopY + 15.5, 0);
      scene.add(firTree);
  
-     oakTree.position.set(5, approximateFlatTopY + 5, 0);
+     oakTree.position.set(5, approximateFlatTopY + 15.5, 0);
      scene.add(oakTree);
 
      //add lake+
      const lake = CreateLake();
      scene.add(lake);
-     lake.position.set(0, approximateFlatTopY + 5, 0);
+     lake.position.set(0, approximateFlatTopY + 15.5, 0);
+
+     //add grass:
+
      
      
 
@@ -113,30 +128,10 @@ function randomPositionOnGrass() {
     let r = radius * Math.sqrt(Math.random()); // Random distance from the center
     let x = r * Math.cos(angle);
     let z = r * Math.sin(angle);
-    return new THREE.Vector3(x, approximateFlatTopY + 5, z); // Adjust the Y position as needed
+    return new THREE.Vector3(x, approximateFlatTopY + 15.5, z); // Adjust the Y position as needed
 }
 
-function addGrassOnIsland(island) {
-    const flattenLevel = approximateFlatTopY; // The flat top y-level of the island
 
-    // Increasing the segment count for finer detail
-    const topRadius = 21.5; // Adjust this value based on the actual size of the flat top of your island
-    const segments = 16; // Increased number of segments for a smooth circle
-    const height = 1; // The thickness of the grass layer
-
-    // Create a circular grass area with thickness
-    const grassGeometry = new THREE.CylinderGeometry(topRadius, topRadius, height, segments);
-    grassGeometry.rotateX(Math.PI / 1); // Rotate to lay flat like a disk
-
-    // Use a flat green color for the grass, making it appear as a uniform surface
-    var grassMaterial = new THREE.MeshLambertMaterial({ color: 0x2f6b37, side: THREE.DoubleSide });
-
-    // Create the grass mesh
-    const grass = new THREE.Mesh(grassGeometry, grassMaterial);
-    grass.position.set(island.position.x, flattenLevel + 4.5, island.position.z);
-
-    scene.add(grass);
-}
 
 
 
@@ -146,6 +141,7 @@ function createComplexFloatingIsland() {
     const positions = baseGeometry.attributes.position;
     const verticesCount = positions.count;
     const vertex = new THREE.Vector3();
+  
 
     // Compute the max and min height of vertices to scale the displacement accordingly
     let maxHeight = 0;
@@ -189,6 +185,8 @@ function createComplexFloatingIsland() {
     // Create a mesh with the modified geometry and a simple gray material
     const islandMaterial = new THREE.MeshLambertMaterial({ color: 0x808080 }); // Medium gray
     const island = new THREE.Mesh(baseGeometry, islandMaterial); // Define 'island' here
+    island.castShadow = true;
+    island.receiveShadow = true;
 
     // Position the island to float
     island.position.y = 5; // Adjust height as needed
@@ -203,16 +201,7 @@ function createComplexFloatingIsland() {
 }
 
 
-function placeCubeOnTopOfIsland(island, cube) {
 
-    const flattenLevel = approximateFlatTopY; // This is the y position of the island's flat top.
-
-    const cubeHeight = 1; // Half the cube's height, since its position is based on the cube's center.
-
-    const yOffset = cubeHeight / 2 + 0.1;
-
-    cube.position.set(0, flattenLevel + yOffset, 0);
-}
 
 
 
