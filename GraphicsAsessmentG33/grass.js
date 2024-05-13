@@ -31,7 +31,3 @@ export function createGrass(island) {
     return { grass, grassRing };
 }
 
-function grassTerainRaiser() {
-
-
-}
