@@ -101,7 +101,7 @@ function init() {
      //add lake+
      const lake = CreateLake();
      scene.add(lake);
-     lake.position.set(0, approximateFlatTopY + 15.5, 0);
+     lake.position.set(0, approximateFlatTopY + 15, 0);
 
      //add grass:
 
