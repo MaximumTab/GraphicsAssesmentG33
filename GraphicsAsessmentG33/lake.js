@@ -61,7 +61,7 @@ function updateTerrain() {
                 vertices[i + 2] = - (depthFactor); // Flatten the bottom
             }
         } else {
-            vertices[i + 2] = 0; // Flatten outside the circle
+            vertices[i + 2] = -4; // Flatten outside the circle
         }
     }
 
