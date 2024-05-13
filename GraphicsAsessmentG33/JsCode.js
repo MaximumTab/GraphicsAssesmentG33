@@ -6,7 +6,9 @@ import { createDayNightSlider, createSunAndMoon } from './daynight.js';
 import { createGrass } from './grass.js';
 import { createIsland } from './island.js';
 import { CreateLake } from './lake.js';
-import { createFirTree, createOakTree } from './trees.js';
+import { createFirTree, createOakTree, createBirchTree } from './trees.js';
+import { createCloud } from './clouds.js';
+
 
 
 
@@ -106,6 +108,11 @@ function init() {
      const lake = CreateLake();
      scene.add(lake);
      lake.position.set(0, approximateFlatTopY + 15, 0);
+
+     //Add clouds
+     const cloud = createCloud(3);
+     cloud.position.set(-5, 40, 0);
+     scene.add(cloud);
 
      //add grass:
 
