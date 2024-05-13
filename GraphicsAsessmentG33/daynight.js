@@ -5,8 +5,8 @@ function updateBackgroundColor(scene, timeOfDay) {
     const colors = [
         0x000000, // Midnight (night)
         0x96EAFD, // Morning
-        0x0064FF, // Day
-        0x826F58, // Evening
+        0x317ef5, // Day
+        0x010238, // Evening
         0x000000  // Midnight again (night)
     ];
 
@@ -28,7 +28,7 @@ function updateBackgroundColor(scene, timeOfDay) {
     const sun = scene.getObjectByName('sun');
     const moon = scene.getObjectByName('moon');
     if (sun && moon) {
-        // Adjust initial positions and rotation
+
         const sunAngle = Math.PI * 2 * (timeOfDay / dayLength - 0.25);
         const moonAngle = Math.PI * 2 * ((timeOfDay + dayLength / 2) / dayLength - 0.25);
 
@@ -38,6 +38,12 @@ function updateBackgroundColor(scene, timeOfDay) {
         moon.position.set(Math.cos(moonAngle) * 100, Math.sin(moonAngle) * 100, 0);
         moon.rotation.z = moonAngle - Math.PI / 2; // Correct rotation
     }
+
+    if (segmentIndex === 0 || segmentIndex === colors.length - 1) {
+        addStars(scene);
+    } else {
+        removeStars(scene);
+    }
 }
 
 // Day Night Slider
@@ -45,8 +51,8 @@ function createDayNightSlider(scene) {
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 0;
-    slider.max = 24; // 24 segments/hours
-    slider.value = 12; // start at 12
+    slider.max = 24; 
+    slider.value = 12; 
     slider.step = 0.1;
     slider.style.position = 'absolute'; 
     slider.style.top = '10px'; 
@@ -57,8 +63,7 @@ function createDayNightSlider(scene) {
     });
     document.body.appendChild(slider);
 
-    // Update background color initially
-    updateBackgroundColor(scene, 12); // Set initial time to noon (12:00)
+    updateBackgroundColor(scene, 12);
 }
 
 // add stars
@@ -91,7 +96,7 @@ function addStars(scene) {
     starGeometry.setAttribute('size', new THREE.BufferAttribute(vertices, 1));
 
     const stars = new THREE.Points(starGeometry, starMaterial);
-    stars.name = 'stars'; // Assign a name to the stars object
+    stars.name = 'stars';
 
     scene.add(stars);
 }
@@ -110,20 +115,19 @@ function createSunAndMoon(scene) {
     const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffd700 });
     const sun = new THREE.Mesh(sunGeometry, sunMaterial);
     sun.name = 'sun';
-    sun.position.set(100, 0, 0); // Set initial position at 12:00
-    sun.rotation.z = -Math.PI / 2; // Adjust rotation for 12:00 position
+    sun.position.set(100, 0, 0); 
+    sun.rotation.z = -Math.PI / 2; 
     scene.add(sun);
 
     const moonGeometry = new THREE.SphereGeometry(5, 32, 32);
     const moonMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
     moon.name = 'moon';
-    moon.position.set(-100, 0, 0); // Set initial position at 12:00
-    moon.rotation.z = -Math.PI / 2; // Adjust rotation for 12:00 position
+    moon.position.set(-100, 0, 0); 
+    moon.rotation.z = -Math.PI / 2; 
     scene.add(moon);
 
-    // Update background color initially
-    updateBackgroundColor(scene, 12); // Set initial time to noon (12:00)
+    updateBackgroundColor(scene, 12); 
 }
 
 export { createDayNightSlider, createSunAndMoon };

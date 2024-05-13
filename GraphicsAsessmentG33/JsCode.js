@@ -22,7 +22,7 @@ onWindowResize();
 function init() {
     //Add Scene
     scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0762ad);
+    scene.background = new THREE.Color(0x317ef5);
     var ratio = window.innerWidth / window.innerHeight;
 
     //Add Camera
