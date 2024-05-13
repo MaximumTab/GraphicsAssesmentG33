@@ -26,8 +26,12 @@ export function createGrass(island) {
     const grassRing = new THREE.Mesh(grassGeometryRing, grassMaterial);
     // Set position to be aligned with the island mesh
     grass.position.set(island.position.x, island.position.y+25, island.position.z); // Adjust Y coordinate as needed
-    grassRing.position.set(island.position.x, island.position.y+25, island.position.z);
+    grassRing.position.set(island.position.x, island.position.y+25, island.position.z)
 
     return { grass, grassRing };
 }
 
+function grassTerainRaiser() {
+
+
+}
