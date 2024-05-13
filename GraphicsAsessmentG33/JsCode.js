@@ -91,12 +91,16 @@ function init() {
      // Adding trees
      const firTree = createFirTree();
      const oakTree = createOakTree();
+     const birchTree = createBirchTree();
  
      firTree.position.set(-5, approximateFlatTopY + 15.5, 0);
      scene.add(firTree);
  
      oakTree.position.set(5, approximateFlatTopY + 15.5, 0);
      scene.add(oakTree);
+
+     birchTree.position.set(-10, approximateFlatTopY + 15.5, 0);
+     scene.add(birchTree);
 
      //add lake+
      const lake = CreateLake();
