@@ -1,13 +1,12 @@
 
 import * as THREE from 'three';
-import { OrbitControls } from './build/controls/OrbitControls.js';
-import { createOakTree } from './trees.js';
-import { createFirTree } from './trees.js';
 import { GLTFLoader } from './build/GLTFLoader.js';
+import { OrbitControls } from './build/controls/OrbitControls.js';
 import { createDayNightSlider, createSunAndMoon } from './daynight.js';
-import {CreateLake} from './lake.js';
-import {createGrass}  from './grass.js';
-import {createIsland} from './island.js';
+import { createGrass } from './grass.js';
+import { createIsland } from './island.js';
+import { CreateLake } from './lake.js';
+import { createFirTree, createOakTree } from './trees.js';
 
 
 
@@ -123,14 +122,17 @@ function loadModel(modelPath, scale, modelName) {
 }
 
 function randomPositionOnGrass() {
-    const radius = 20; // Radius of the grass plane, adjust to match its actual size
+    const grassRadius = 24; // Outer radius of the grass area
+    const lakeRadius = 5; // Radius of the lake
     let angle = Math.random() * Math.PI * 2; // Random angle
-    let r = radius * Math.sqrt(Math.random()); // Random distance from the center
+
+    // Ensure random distance is outside the lake's radius
+    let r = Math.sqrt(Math.random() * (grassRadius * grassRadius - lakeRadius * lakeRadius) + lakeRadius * lakeRadius);
     let x = r * Math.cos(angle);
     let z = r * Math.sin(angle);
+
     return new THREE.Vector3(x, approximateFlatTopY + 15.5, z); // Adjust the Y position as needed
 }
-
 
 
 function onWindowResize() {
