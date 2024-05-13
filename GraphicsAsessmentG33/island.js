@@ -80,10 +80,10 @@ function flipFaces(geometry) {
 
 
 export function updateSeed(scene) {
-    seed = Math.floor(Math.random() * 10000);  // Generate a new random seed
-    noise = createNoise2D(() => seededRandom(seed));  // Update the noise function with the new seed
+    seed = Math.floor(Math.random() * 10000);  //  new seed generator
+    noise = createNoise2D(() => seededRandom(seed));  // Update noise function with new seed
     
-    const newIsland = createIsland(scene);  // Create a new island with updated noise settings
+    const newIsland = createIsland(scene);  // Create a new island with updated noise
     
     if (scene.island) {
         scene.remove(scene.island);  // Remove the old island if it exists
