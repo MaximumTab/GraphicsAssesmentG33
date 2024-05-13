@@ -81,7 +81,7 @@ function flipFaces(geometry) {
 
 export function updateSeed(scene) {
     seed = Math.floor(Math.random() * 10000);  //  new seed generator
-    noise = createNoise2D(() => seededRandom(seed));  // Update noise function with new seed
+    noise = createNoise2D(function() { return seededRandom(seed) });  // Update noise function with new seed
     
     const newIsland = createIsland(scene);  // Create a new island with updated noise
     

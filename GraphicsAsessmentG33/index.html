@@ -6,32 +6,22 @@
 				margin: 0;
 			}
 
-			.control-panel {
-			  background-color: rgba(255, 255, 255, 0.5); /* Adjust transparency as needed */
-			  padding: 10px;
-			  border-radius: 10px;
-			  align-items: center;
-			  display: flex;
-			  flex-direction: column;
+			#randomizeSeedButton {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				padding: 10px;
+				background-color: rgba(255, 255, 255, 0.8);
+				border: none;
+				border-radius: 5px;
+				cursor: pointer;
+				transition: background-color 0.3s;
 			}
 
-			#panelWrapper{
-				padding: 10px;
-				flex-direction: column;
-				position: absolute;
-				display: flex;
-				gap: 10px;
+			#randomizeSeedButton:hover {
+				background-color: rgba(255, 255, 255, 1);
 			}
-		  
-			.control-panel label, 
-			.control-panel input[type=range], 
-			.control-panel button {
-			  width: auto;
-			  margin: 5 0;
-			  align-self: center;
-			  border-radius: 10px;
-			  border-color: transparent;
-			}
+
 
 		  </style>
 	</head>
@@ -39,12 +29,7 @@
 	<body>
 		<link rel="shortcut icon" href="#">
 
-		<html>
-			<body>
-				<button id="randomizeSeedButton">Randomize Seed</button>
-				<script src="JsCode.js"></script>
-			</body>
-		</html>
+		
 
 
 		<script type="importmap">
@@ -64,5 +49,12 @@
 		
 		<script type="module" src="./JsCode.js">
 			</script>
+
+
+		<body>
+			<button id="randomizeSeedButton">Randomize Seed</button>
+			<script src="JsCode.js"></script>
+		</body>
+
 	</body>
 </html>
