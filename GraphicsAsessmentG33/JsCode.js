@@ -4,7 +4,7 @@ import { GLTFLoader } from './build/GLTFLoader.js';
 import { OrbitControls } from './build/controls/OrbitControls.js';
 import { createDayNightSlider, createSunAndMoon } from './daynight.js';
 import { createGrass } from './grass.js';
-import { createIsland } from './island.js';
+import { createIsland, updateSeed } from './island.js';
 import { CreateLake } from './lake.js';
 import { createFirTree, createOakTree, createBirchTree } from './trees.js';
 import { createCloud } from './clouds.js';
@@ -41,21 +41,21 @@ function init() {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true; 
     controls.dampingFactor = 0.25;
-    controls.screenSpacePanning = false;
-
-    // Add Island
-    //const island = createComplexFloatingIsland();
-    //scene.add(island); 
+    controls.screenSpacePanning = false; 
 
     // Create day-night slider
     createDayNightSlider(scene); 
     createSunAndMoon(scene)
 
     //Add island
-    const island = createIsland();
-    scene.add(island);
 
-   /// Add grass on the island
+    const island = createIsland();  // Create island
+    scene.add(island);  // Add island to the scene
+    scene.island = island;
+
+    document.getElementById('randomizeSeedButton').addEventListener('click', () => updateSeed(scene));
+
+   // Add grass on the island
    const { grass, grassRing } = createGrass(island);
    scene.add(grass);
    scene.add(grassRing);

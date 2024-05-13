@@ -1,9 +1,11 @@
 import * as THREE from 'three';
 import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
+import  {seededRandom} from './meth/MathUtils.js';
 
-//let seed = 3;
-//let noise = createNoise2D(function() { return seededRandom(seed) }); //when using i have to use: noise = createNoise2D(function() { return seededRandom(seed) });
-let noise = createNoise2D();
+
+let sceneTemp;
+let seed = 170803; //adjust on input for different island shapes
+let noise = createNoise2D(function() { return seededRandom(seed) }); //when using: noise = createNoise2D(function() { return seededRandom(seed) }); to update
 
 //island parameters 
 const radius = 25; //top island radius
@@ -74,6 +76,23 @@ function flipFaces(geometry) {
     }
     geometry.index.needsUpdate = true; // Flag the indices to be updated on the GPU
 }
+
+
+
+export function updateSeed(scene) {
+    seed = Math.floor(Math.random() * 10000);  // Generate a new random seed
+    noise = createNoise2D(() => seededRandom(seed));  // Update the noise function with the new seed
+    
+    const newIsland = createIsland(scene);  // Create a new island with updated noise settings
+    
+    if (scene.island) {
+        scene.remove(scene.island);  // Remove the old island if it exists
+    }
+    scene.island = newIsland;  // Reference the new island in the scene object for future updates
+    scene.add(newIsland);  // Add the new island to the scene
+}
+
+
 
 
 
