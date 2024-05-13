@@ -54,7 +54,9 @@ function init() {
     scene.add(island);
 
    /// Add grass on the island
-    scene.add(createGrass(island));
+   const { grass, grassRing } = createGrass(island);
+   scene.add(grass);
+   scene.add(grassRing);
 
     
 
