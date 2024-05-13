@@ -1,18 +1,18 @@
 import * as THREE from 'three';
 
 export function createGrass(island) {
-    const outerRadius = 25; // Adjust this value based on the actual size of the flat top of your island
-    const innerRadius = 5; // Adjust this to create a suitable hole size for the lake
-    const segments = 256; // Increased number of segments for a smooth circle
+    const outerRadius = 25; 
+    const innerRadius = 5;
+    const segments = 256;
 
     //dounut for the edge
     const radius = outerRadius; 
     const tube = 0.1  ;
-    const radialSegments = 256 ;                // Smoothness of the main circle
-    const tubularSegments =256;                     // Smoothness of the tube
+    const radialSegments = 256 ;               
+    const tubularSegments =256;                   
 
 
-    // Create a ring geometry for the grass area with an inner hole
+    //ring geometry for the grass area with hole
     const grassGeometry = new THREE.RingGeometry(innerRadius, outerRadius, segments);
     const grassGeometryRing = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
     grassGeometry.rotateX(Math.PI / 2); // Rotate to lay flat
