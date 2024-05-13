@@ -81,9 +81,9 @@ function init() {
     light.shadow.mapSize.height = 1024;
     scene.add(light);
 
-    // const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
-    // light.position.set(0, -100, 0);
-    // scene.add(light2);
+    const light2 = new THREE.DirectionalLight(0xffffff, 0.5);
+    light2.position.set(0, -100, 0);
+    scene.add(light2);
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
