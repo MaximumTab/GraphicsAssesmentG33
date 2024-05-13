@@ -1,12 +1,15 @@
 import * as THREE from 'three';
 import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
 
-const noise = createNoise2D();
-// Assuming you have included simplex-noise or another noise library
-const radius = 25; // Desired radius of the circular area
-const scale = 15;
-const amplitude = 3;
-const steepness = 30;
+//let seed = 3;
+//let noise = createNoise2D(function() { return seededRandom(seed) }); //when using i have to use: noise = createNoise2D(function() { return seededRandom(seed) });
+let noise = createNoise2D();
+
+//island parameters 
+const radius = 25; //top island radius
+const scale = 15; //idk smth dont change too much tho
+const amplitude = 3; // function peaks
+const steepness = 30; //changes height inderectly how far the walls go up 
 
 export function createIsland() {
     const material = new THREE.MeshPhongMaterial({ color: 0x808080, specular: 0x111111, shininess: 10});
@@ -17,35 +20,34 @@ export function createIsland() {
     island.receiveShadow = true;
     island.rotateX(Math.PI / -2);
 
-    flipFaces(geometry);   // Flip the faces if needed
-    invertNormals(geometry); // Invert normals to correct the orientation
+    flipFaces(geometry);  
+    invertNormals(geometry); 
 
 
     const positions = geometry.attributes.position.array;
 
-    const fixedHeight = 25; // Height where the red arrow points
+    const fixedHeight = 25; // Height where the verticies get draged up to
     const edgeRadius = radius; // This should be the same as the island radius to ensure boundary alignment
 
     for (let i = 0; i < positions.length; i += 3) {
         let x = positions[i];
         let y = positions[i + 1];
-
+        let z = positions[i + 2];
+    
         const distance = Math.sqrt(x * x + y * y);
         
-        if (distance > edgeRadius) {
-            // Correcting position to lie exactly on the radius
+        if (distance >= edgeRadius) {
+            // Adjust vertices on or outside the circle radius onto that radius
             const angle = Math.atan2(y, x);
-            positions[i] = Math.cos(angle) * edgeRadius; // Adjust x to be on the radius
-            positions[i + 1] = Math.sin(angle) * edgeRadius; // Adjust y to be on the radius
-            positions[i + 2] = fixedHeight; // Set fixed height for edge vertices
-        } else if (distance >= radius) {
-            // Adjust the height to fixedHeight if it's on the boundary
-            positions[i + 2] = fixedHeight;
+            positions[i] = Math.cos(angle) * edgeRadius;  // Adjust x to be on the radius
+            positions[i + 1] = Math.sin(angle) * edgeRadius;  // Adjust y to be on the radius
+            positions[i + 2] = fixedHeight;  // Set fixed height for edge vertices
         } else {
             // Calculate height for inner vertices as before
             const value = noise(x / scale, y / scale);
             const coneHeight = x * x / steepness + y * y / steepness;
-            positions[i + 2] = value * amplitude + amplitude + coneHeight; // Modify z component
+            z = value * amplitude + amplitude + coneHeight;
+            positions[i + 2] = Math.min(z, fixedHeight);  // Ensure no vertex is above the fixed height
         }
     }
 
