@@ -133,7 +133,7 @@ function randomPositionOnGrass() {
     let x = r * Math.cos(angle);
     let z = r * Math.sin(angle);
 
-    return new THREE.Vector3(x, approximateFlatTopY + 15.5, z); // Adjust the Y position as needed
+    return new THREE.Vector3(x, approximateFlatTopY + 15.1, z); // Adjust the Y position as needed
 }
 
 
