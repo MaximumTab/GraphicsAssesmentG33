@@ -36,8 +36,7 @@ export function CreateLake(){
     
 
 const noise = createNoise2D();
-// Assuming you have included simplex-noise or another noise library
-const geometry = new THREE.PlaneGeometry(10, 10, 100, 100); // Plane size: 10x10, subdivided into 100x100 segments
+const geometry = new THREE.PlaneGeometry(10, 10, 100, 100);
 const radius = 5; // Desired radius of the circular area
 const radiusSquared = radius * radius; // Square the radius for faster comparison// Maximum constant depth adjustment at the center
 const scale = 0.7;
@@ -66,13 +65,14 @@ function updateTerrain() {
     }
 
     geometry.attributes.position.needsUpdate = true;
-    geometry.computeVertexNormals(); // Necessary for proper shading and smoothing
-
+    geometry.computeVertexNormals();
     return geometry;
 }
-
 updateTerrain();
-// Water    
+
+
+
+
 function createRocks(){
     const lakeRadius = 5; // Radius of the lake
     const numberOfRocks = 30; // Set a fixed number of rocks
@@ -81,30 +81,32 @@ function createRocks(){
     for (let i = 0; i < numberOfRocks; i++) {
         const angle = (i / numberOfRocks) * 2 * Math.PI; // Evenly spaced in circular pattern
         const rockRadius = Math.random() * 0.5 + 0.2; // Random rock radius between 0.2 and 0.7
-        const x = lakeRadius * Math.cos(angle); // Position rocks exactly on the edge of the lake
+        const x = lakeRadius * Math.cos(angle); 
         const z = lakeRadius * Math.sin(angle);
         const rockGeometry = new THREE.SphereGeometry(rockRadius, 20, 20);
         const rockMaterial = new THREE.MeshBasicMaterial({ color: 0x888888 });
         const rock = new THREE.Mesh(rockGeometry, rockMaterial);
         rock.position.set(z, x,0 );
-        rocks.push(rock); // Add the rock to the array
+        rocks.push(rock);
     }
     
     return rocks; // Return the array of rocks
 }
+
+
 function createWater(){
     const waterRadius = 5; // Same as the radius of the circular terrain
     const segments = 32; // Define the smoothness of the circle's edge
     const waterGeometry = new THREE.CircleGeometry(waterRadius, segments);
     const waterMaterial = new THREE.MeshPhongMaterial({
-        color: 0x0096c7, // A nice water blue
+        color: 0x0096c7, 
         transparent: true,
         opacity: 0.6,
         reflectivity: 0.6
     });
     
     const water = new THREE.Mesh(waterGeometry, waterMaterial);
-    water.position.set(0, 0.1, 0); // Centered and slightly above the lake bed to avoid z-fighting
+    water.position.set(0, 0.1, 0); // Slightly above the terrain
 
 
     return water;
