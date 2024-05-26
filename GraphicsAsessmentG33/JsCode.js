@@ -2,12 +2,13 @@
 import * as THREE from 'three';
 import { GLTFLoader } from './build/GLTFLoader.js';
 import { OrbitControls } from './build/controls/OrbitControls.js';
+import { createCloud } from './clouds.js';
 import { createDayNightSlider, createSunAndMoon } from './daynight.js';
 import { createGrass } from './grass.js';
 import { createIsland, updateSeed } from './island.js';
-import { CreateLake } from './lake.js';
-import { createFirTree, createOakTree, createBirchTree } from './trees.js';
-import { createCloud } from './clouds.js';
+import { createMountainMesh } from './mountain.js';
+import { createWaterBody, waterUniforms } from './pond.js';
+import { createBirchTree, createFirTree, createOakTree } from './trees.js';
 
 
 
@@ -105,7 +106,7 @@ function init() {
      scene.add(birchTree);
 
      //add lake+
-     const lake = CreateLake();
+     const lake = createWaterBody();
      scene.add(lake);
      lake.position.set(0, approximateFlatTopY + 15, 0);
 
@@ -113,6 +114,10 @@ function init() {
      const cloud = createCloud(3);
      cloud.position.set(-5, 40, 0);
      scene.add(cloud);
+
+     const mountain = createMountainMesh();
+     mountain.position.set(-17, approximateFlatTopY + 15, 0);
+     scene.add(mountain);
 
      //add grass:
 
@@ -158,4 +163,5 @@ function animate() {
     requestAnimationFrame(animate);
     controls.update();
     renderer.render(scene, camera);
+    waterUniforms.time.value += 0.01;
 }

@@ -1,6 +1,6 @@
 
-import { createNoise2D } from 'simplex-noise';
 import * as THREE from 'three';
+import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
 
 const noise = createNoise2D();
 // Define geometry parameters
@@ -11,7 +11,7 @@ const mscale = 1;
 const mamplitude = 3;
 
 // CreateMountain function
-export function CreateMountain() {
+function CreateMountain() {
     const vertices = mgeometry.attributes.position.array;
 
     for (let i = 0; i < vertices.length; i += 3) {
