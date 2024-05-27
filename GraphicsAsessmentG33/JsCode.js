@@ -9,6 +9,7 @@ import { createIsland, updateSeed } from './island.js';
 import { createMountainMesh } from './mountain.js';
 import { createWaterBody, waterUniforms } from './pond.js';
 import { createBirchTree, createFirTree, createOakTree } from './trees.js';
+import { generateTrees } from './TreeGeneration.js';
 
 
 
@@ -53,6 +54,7 @@ function init() {
     const island = createIsland();  // Create island
     scene.add(island);  // Add island to the scene
     scene.island = island;
+    generateTrees(island);
 
     document.getElementById('randomizeSeedButton').addEventListener('click', () => updateSeed(scene));
 
@@ -92,38 +94,38 @@ function init() {
     scene.add(ambientLight);
 
      // Adding trees
-     function generateTrees() {
-        const firTrees = new THREE.Group();
+    //  function generateTrees() {
+    //     const firTrees = new THREE.Group();
 
-        for (let i = 0; i < 50; i++) {
-            const x = Math.random()*(i/2);
-            const y = approximateFlatTopY + 15;
-            const z = Math.random()*(i/2);
+    //     for (let i = 0; i < 50; i++) {
+    //         const x = Math.random()*(i/2);
+    //         const y = approximateFlatTopY + 15;
+    //         const z = Math.random()*(i/2);
 
-            const firTree = createFirTree();
-            firTree.position.set(x, y, z);
+    //         const firTree = createFirTree();
+    //         firTree.position.set(x, y, z);
 
-            firTrees.add(firTree);
-        }
+    //         firTrees.add(firTree);
+    //     }
 
-        return firTrees;
-     }
+    //     return firTrees;
+    //  }
 
-     const treeGroup = generateTrees();
-     scene.add(treeGroup);
+    //  const treeGroup = generateTrees();
+    //  scene.add(treeGroup);
 
-    //  const firTree = createFirTree();
-     const oakTree = createOakTree();
-     const birchTree = createBirchTree();
+    // //  const firTree = createFirTree();
+    //  const oakTree = createOakTree();
+    //  const birchTree = createBirchTree();
  
-    //  firTree.position.set(-5, approximateFlatTopY + 15.5, 0);
-    //  scene.add(firTree);
+    // //  firTree.position.set(-5, approximateFlatTopY + 15.5, 0);
+    // //  scene.add(firTree);
  
-     oakTree.position.set(5, approximateFlatTopY + 15.5, 0);
-     scene.add(oakTree);
+    //  oakTree.position.set(5, approximateFlatTopY + 15.5, 0);
+    //  scene.add(oakTree);
 
-     birchTree.position.set(-10, approximateFlatTopY + 15.5, 0);
-     scene.add(birchTree);
+    //  birchTree.position.set(-10, approximateFlatTopY + 15.5, 0);
+    //  scene.add(birchTree);
 
      //add lake+
      const lake = createWaterBody();
