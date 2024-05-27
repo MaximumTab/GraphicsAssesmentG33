@@ -92,12 +92,32 @@ function init() {
     scene.add(ambientLight);
 
      // Adding trees
-     const firTree = createFirTree();
+     function generateTrees() {
+        const firTrees = new THREE.Group();
+
+        for (let i = 0; i < 50; i++) {
+            const x = Math.random()*(i/2);
+            const y = approximateFlatTopY + 15.5;
+            const z = Math.random()*(i/2);
+
+            const firTree = createFirTree();
+            firTree.position.set(x, y, z);
+
+            firTrees.add(firTree);
+        }
+
+        return firTrees;
+     }
+
+     const treeGroup = generateTrees();
+     scene.add(treeGroup);
+
+    //  const firTree = createFirTree();
      const oakTree = createOakTree();
      const birchTree = createBirchTree();
  
-     firTree.position.set(-5, approximateFlatTopY + 15.5, 0);
-     scene.add(firTree);
+    //  firTree.position.set(-5, approximateFlatTopY + 15.5, 0);
+    //  scene.add(firTree);
  
      oakTree.position.set(5, approximateFlatTopY + 15.5, 0);
      scene.add(oakTree);

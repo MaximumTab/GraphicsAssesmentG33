@@ -37,8 +37,8 @@ export function createFirTree() {
     const tree = new THREE.Group();
 
     // Material
-    const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
-    const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+    const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x87714A });
+    const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x4A664A, flatShading: true });
     foliageMaterial.name = "foliageMaterial";
 
     // Trunk
@@ -55,9 +55,9 @@ export function createFirTree() {
     // Specific foliage
     tierHeights.forEach((height, i) => {
         const radius = tierRadii[i];
-        const geometry = new THREE.ConeGeometry(radius, height, 12);
+        const geometry = new THREE.ConeGeometry(radius, height*2, 6, 1, false, Math.random());
         const mesh = new THREE.Mesh(geometry, foliageMaterial);
-        mesh.position.y = yPos + height / 2;
+        mesh.position.y = yPos + height;
         yPos += height * 0.75;
         tree.add(mesh);
     });
@@ -69,8 +69,8 @@ export function createOakTree() {
     const tree = new THREE.Group();
 
     // Material
-    const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x8B4513 });
-    const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+    const trunkMaterial = new THREE.MeshLambertMaterial({ color: 0x7C5B42 });
+    const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x10471C, flatShading: true });
     foliageMaterial.name = "foliageMaterial";
 
     // Trunk
@@ -97,7 +97,7 @@ export function createBirchTree() {
 
     // Material
     const trunkMaterial = new THREE.MeshLambertMaterial({ map: barkTexture });
-    const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0x228B22 });
+    const foliageMaterial = new THREE.MeshLambertMaterial({ color: 0xFFAC1C, flatShading: true });
     foliageMaterial.name = "foliageMaterial";
 
     // Trunk
