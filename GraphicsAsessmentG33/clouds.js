@@ -43,7 +43,7 @@ function createCloud(numTufts) {
     }
 
     const cloudGeometry = BufferGeometryUtils.mergeGeometries(tufts);
-    const cloudMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff });
+    const cloudMaterial = new THREE.MeshPhongMaterial({ color: 0xffffff, transparent: true, opacity: 0.8 });
     const cloud = new THREE.Mesh(cloudGeometry, cloudMaterial);
 
     return cloud;

@@ -97,7 +97,7 @@ function init() {
 
         for (let i = 0; i < 50; i++) {
             const x = Math.random()*(i/2);
-            const y = approximateFlatTopY + 15.5;
+            const y = approximateFlatTopY + 15;
             const z = Math.random()*(i/2);
 
             const firTree = createFirTree();

@@ -48,7 +48,7 @@ export function createFirTree() {
     tree.add(trunk);
 
     // General foliage
-    const tierHeights = [0.6, 0.5, 0.4, 0.3, 0.2].map(h => h + Math.random() * 0.2); // Procedural height
+    const tierHeights = [Math.random() + 0.8, Math.random() + 0.7, Math.random() + 0.5, Math.random() + 0.4, Math.random() + 0.2].map(h => h + Math.random() * 0.2); // Procedural height
     const tierRadii = [1, 0.8, 0.6, 0.4, 0.3].map(r => r * (0.8 + Math.random() * 0.4)); // Procedural radius
     let yPos = trunk.position.y + 0.5;
 
