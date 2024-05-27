@@ -54,6 +54,8 @@ function init() {
     const island = createIsland();  // Create island
     scene.add(island);  // Add island to the scene
     scene.island = island;
+
+    //Add Trees
     generateTrees(island);
 
     document.getElementById('randomizeSeedButton').addEventListener('click', () => updateSeed(scene));
@@ -93,49 +95,26 @@ function init() {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
     scene.add(ambientLight);
 
-     // Adding trees
-    //  function generateTrees() {
-    //     const firTrees = new THREE.Group();
-
-    //     for (let i = 0; i < 50; i++) {
-    //         const x = Math.random()*(i/2);
-    //         const y = approximateFlatTopY + 15;
-    //         const z = Math.random()*(i/2);
-
-    //         const firTree = createFirTree();
-    //         firTree.position.set(x, y, z);
-
-    //         firTrees.add(firTree);
-    //     }
-
-    //     return firTrees;
-    //  }
-
-    //  const treeGroup = generateTrees();
-    //  scene.add(treeGroup);
-
-    // //  const firTree = createFirTree();
-    //  const oakTree = createOakTree();
-    //  const birchTree = createBirchTree();
- 
-    // //  firTree.position.set(-5, approximateFlatTopY + 15.5, 0);
-    // //  scene.add(firTree);
- 
-    //  oakTree.position.set(5, approximateFlatTopY + 15.5, 0);
-    //  scene.add(oakTree);
-
-    //  birchTree.position.set(-10, approximateFlatTopY + 15.5, 0);
-    //  scene.add(birchTree);
-
      //add lake+
      const lake = createWaterBody();
      scene.add(lake);
      lake.position.set(0, approximateFlatTopY + 15, 0);
 
      //Add clouds
-     const cloud = createCloud(3);
-     cloud.position.set(-5, 40, 0);
-     scene.add(cloud);
+    //  const cloud = createCloud(3);
+    //  cloud.position.set(-5, 40, 0);
+    //  scene.add(cloud);
+
+     const clouds = new THREE.Group();
+     for (let i = 1; i < 7; i++) {
+        const cloud = createCloud(Math.floor(Math.random()*5)+3);
+        const angle = Math.random() * Math.PI * 2;
+        const distance = 20 + Math.random() * 10;
+        cloud.position.set(Math.cos(angle) * distance, 40 + Math.random() * 10, Math.sin(angle) * distance);
+
+        clouds.add(cloud);
+     }
+     scene.add(clouds);
 
      const mountain = createMountainMesh();
      mountain.position.set(-17, approximateFlatTopY + 15, 0);
