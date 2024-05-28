@@ -131,8 +131,16 @@ function init() {
 
 function loadModel(modelPath, scale, modelName) {
     const loader = new GLTFLoader();
+    const greenMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+
     loader.load(modelPath, function(gltf) {
         const model = gltf.scene;
+        model.traverse((node) => {
+            if (node.isMesh) {
+                node.material = greenMaterial;
+            }
+        });
+
         model.scale.set(scale, scale, scale);
         model.position.copy(randomPositionOnGrass());
         model.name = modelName; // Useful for debugging

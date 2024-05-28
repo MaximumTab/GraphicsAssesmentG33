@@ -1,0 +1,7 @@
+CHANGES SINCE THE PRESENTATION
+
+-Montain added (rkrwk)
+-Trees and Clouds updated (StephenKhumlamphai)
+-noiseplacement for trees (StephenKhumlamphai)
+-Added randomness to cloud generation(StephenKhumlamphai)
+-Added Changes text doc (MaximumTab)
