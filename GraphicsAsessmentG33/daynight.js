@@ -1,13 +1,19 @@
 import * as THREE from 'three';
-import { OrbitControls } from './build/controls/OrbitControls.js';
+
+let useSunMoonLighting = false;
+let ambientLight;
+let sunLight, moonLight;
+let starsAdded = false; 
 
 function updateBackgroundColor(scene, timeOfDay) {
     const colors = [
-        0x000000, // Midnight (night)
-        0x96EAFD, // Morning
-        0x317ef5, // Day
-        0x010238, // Evening
-        0x000000  // Midnight again (night)
+        0x000000,
+        0x000000,
+        0x96EAFD,
+        0x317ef5, 
+        0x010238, 
+        0x000000, 
+        0x000000  
     ];
 
     const dayLength = 24;
@@ -17,46 +23,73 @@ function updateBackgroundColor(scene, timeOfDay) {
     const color = new THREE.Color().setHex(colors[segmentIndex]).lerp(new THREE.Color().setHex(colors[segmentIndex + 1]), t);
     scene.background = color;
 
-    // Add or remove stars based on the time of day
-    if (segmentIndex === 0 || segmentIndex === colors.length - 1) {
-        addStars(scene);
-    } else {
-        removeStars(scene);
-    }
-
-    // Update positions of sun and moon
     const sun = scene.getObjectByName('sun');
     const moon = scene.getObjectByName('moon');
     if (sun && moon) {
-
         const sunAngle = Math.PI * 2 * (timeOfDay / dayLength - 0.25);
         const moonAngle = Math.PI * 2 * ((timeOfDay + dayLength / 2) / dayLength - 0.25);
 
         sun.position.set(Math.cos(sunAngle) * 100, Math.sin(sunAngle) * 100, 0);
-        sun.rotation.z = sunAngle - Math.PI / 2; // Correct rotation
+        sun.rotation.z = sunAngle - Math.PI / 2;
 
         moon.position.set(Math.cos(moonAngle) * 100, Math.sin(moonAngle) * 100, 0);
-        moon.rotation.z = moonAngle - Math.PI / 2; // Correct rotation
+        moon.rotation.z = moonAngle - Math.PI / 2;
+
+        if (useSunMoonLighting) {
+            updateLighting(scene, sun, moon);
+        }
     }
 
-    if (segmentIndex === 0 || segmentIndex === colors.length - 1) {
-        addStars(scene);
+    if (timeOfDay < 6 || timeOfDay > 15) {
+        if (!starsAdded) {
+            addStars(scene);
+            starsAdded = true;
+        }
     } else {
         removeStars(scene);
     }
 }
 
-// Day Night Slider
+
+function updateLighting(scene, sun, moon) {
+    if (!ambientLight) {
+        ambientLight = new THREE.AmbientLight(0xffffff, 0.1);
+        scene.add(ambientLight);
+    }
+
+    if (!sunLight) {
+        sunLight = new THREE.DirectionalLight(0xffd700, 1);
+        sunLight.castShadow = true;
+        scene.add(sunLight);
+    }
+
+    if (!moonLight) {
+        moonLight = new THREE.DirectionalLight(0xaaaaff, 0.5);
+        scene.add(moonLight);
+    }
+
+    const sunIntensity = Math.max(0, sun.position.y / 100);
+    const moonIntensity = Math.max(0, moon.position.y / 100);
+
+    sunLight.intensity = sunIntensity * 5; 
+    moonLight.intensity = moonIntensity * 3; 
+
+    sunLight.position.copy(sun.position);
+    moonLight.position.copy(moon.position);
+
+    ambientLight.intensity = 0; 
+}
+
 function createDayNightSlider(scene) {
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 0;
-    slider.max = 24; 
-    slider.value = 12; 
+    slider.max = 24;
+    slider.value = 12;
     slider.step = 0.1;
-    slider.style.position = 'absolute'; 
-    slider.style.top = '10px'; 
-    slider.style.left = '10px'; 
+    slider.style.position = 'absolute';
+    slider.style.top = '10px';
+    slider.style.left = '10px';
     slider.addEventListener('input', function(event) {
         const timeOfDay = parseFloat(event.target.value);
         updateBackgroundColor(scene, timeOfDay);
@@ -66,21 +99,64 @@ function createDayNightSlider(scene) {
     updateBackgroundColor(scene, 12);
 }
 
-// add stars
+function createLightingToggleButton(scene) {
+    const button = document.createElement('button');
+    button.innerText = 'Enable Sun/Moon Lighting';
+    button.style.position = 'absolute';
+    button.style.top = '40px';
+    button.style.left = '10px';
+    button.addEventListener('click', function() {
+        useSunMoonLighting = !useSunMoonLighting;
+        if (useSunMoonLighting) {
+            button.innerText = 'Disable Sun/Moon Lighting';
+            const slider = document.querySelector('input[type="range"]');
+            updateBackgroundColor(scene, parseFloat(slider.value));
+            disableOtherLights(scene);
+        } else {
+            button.innerText = 'Enable Sun/Moon Lighting';
+            enableOtherLights(scene);
+            scene.remove(sunLight);
+            scene.remove(moonLight);
+            sunLight = null;
+            moonLight = null;
+            if (ambientLight) {
+                ambientLight.intensity = 0.1;  
+            }
+        }
+    });
+    document.body.appendChild(button);
+}
+
+function disableOtherLights(scene) {
+    scene.traverse(object => {
+        if (object.isLight && object !== sunLight && object !== moonLight) {
+            object.visible = false;
+        }
+    });
+}
+
+function enableOtherLights(scene) {
+    scene.traverse(object => {
+        if (object.isLight && object !== sunLight && object !== moonLight) {
+            object.visible = true;
+        }
+    });
+}
+
 function addStars(scene) {
-    const numStars = 500; 
-    const radius = 100; 
+    const numStars = 5000;
+    const radius = 5000;
     const starMaterial = new THREE.PointsMaterial({
         color: 0xffffff,
         size: 0.1
     });
     const starGeometry = new THREE.BufferGeometry();
-    const positions = new Float32Array(numStars * 3); 
-    const vertices = new Float32Array(numStars); 
+    const positions = new Float32Array(numStars * 3);
+    const vertices = new Float32Array(numStars);
 
     for (let i = 0; i < numStars; i++) {
-        const theta = Math.random() * Math.PI * 2; 
-        const phi = Math.random() * Math.PI; 
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.random() * Math.PI;
         const x = Math.cos(theta) * Math.sin(phi) * radius;
         const y = Math.cos(phi) * radius;
         const z = Math.sin(theta) * Math.sin(phi) * radius;
@@ -89,7 +165,7 @@ function addStars(scene) {
         positions[i * 3 + 1] = y;
         positions[i * 3 + 2] = z;
 
-        vertices[i] = 0.1; 
+        vertices[i] = 0.1;
     }
 
     starGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -101,33 +177,35 @@ function addStars(scene) {
     scene.add(stars);
 }
 
-// remove stars
 function removeStars(scene) {
-    const stars = scene.getObjectByName('stars');
-    if (stars) {
-        scene.remove(stars);
+    if (starsAdded) {
+        const stars = scene.getObjectByName('stars');
+        if (stars) {
+            scene.remove(stars);
+            starsAdded = false;
+        }
     }
 }
 
-// Function to create sun and moon
+
 function createSunAndMoon(scene) {
     const sunGeometry = new THREE.SphereGeometry(5, 32, 32);
     const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffd700 });
     const sun = new THREE.Mesh(sunGeometry, sunMaterial);
     sun.name = 'sun';
-    sun.position.set(100, 0, 0); 
-    sun.rotation.z = -Math.PI / 2; 
+    sun.position.set(100, 0, 0);
+    sun.rotation.z = -Math.PI / 2;
     scene.add(sun);
 
     const moonGeometry = new THREE.SphereGeometry(5, 32, 32);
     const moonMaterial = new THREE.MeshBasicMaterial({ color: 0xffffff });
     const moon = new THREE.Mesh(moonGeometry, moonMaterial);
     moon.name = 'moon';
-    moon.position.set(-100, 0, 0); 
-    moon.rotation.z = -Math.PI / 2; 
+    moon.position.set(-100, 0, 0);
+    moon.rotation.z = -Math.PI / 2;
     scene.add(moon);
 
-    updateBackgroundColor(scene, 12); 
+    updateBackgroundColor(scene, 12);
 }
 
-export { createDayNightSlider, createSunAndMoon };
+export { createDayNightSlider, createLightingToggleButton, createSunAndMoon, removeStars, starsAdded };

@@ -1,9 +1,8 @@
-
 import * as THREE from 'three';
 import { GLTFLoader } from './build/GLTFLoader.js';
 import { OrbitControls } from './build/controls/OrbitControls.js';
 import { createCloud } from './clouds.js';
-import { createDayNightSlider, createSunAndMoon } from './daynight.js';
+import { createDayNightSlider, createLightingToggleButton, createSunAndMoon} from './daynight.js';
 import { createGrass } from './grass.js';
 import { createIsland, updateSeed } from './island.js';
 import { createMountainMesh } from './mountain.js';
@@ -11,16 +10,12 @@ import { createWaterBody, waterUniforms } from './pond.js';
 import { createBirchTree, createFirTree, createOakTree } from './trees.js';
 import { generateTrees } from './TreeGeneration.js';
 
-
-
-
 var camera, scene, renderer, controls;
 var approximateFlatTopY = 10;
 
 init();
 animate();
 onWindowResize();
-
 
 function init() {
     //Add Scene
@@ -45,10 +40,10 @@ function init() {
     controls.dampingFactor = 0.25;
     controls.screenSpacePanning = false; 
 
-    // Create day-night slider
-    createDayNightSlider(scene); 
-    createSunAndMoon(scene)
-
+    // Create day-night slider and lighting toggle button
+    createDayNightSlider(scene);
+    createLightingToggleButton(scene);
+    createSunAndMoon(scene);
     //Add island
 
     const island = createIsland();  // Create island

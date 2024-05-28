@@ -1,7 +1,10 @@
 CHANGES SINCE THE PRESENTATION
 
 -Montain added (rkrwk)
--Trees and Clouds updated (StephenKhumlamphai)
--noiseplacement for trees (StephenKhumlamphai)
--Added randomness to cloud generation(StephenKhumlamphai)
--Added Changes text doc (MaximumTab)
+-Trees and Clouds updated                           (StephenKhumlamphai)
+-noiseplacement for trees                           (StephenKhumlamphai)
+-Added randomness to cloud generation               (StephenKhumlamphai)
+-Added Changes text doc                             (MaximumTab)
+-Updated Lighting from sun and moon                 (Lachlan)
+-Adjusted stars (amount and radius)                 (Lachlan)
+-fixed the stuck stars bug                          (Lachlan)
