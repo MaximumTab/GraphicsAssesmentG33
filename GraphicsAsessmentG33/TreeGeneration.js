@@ -1,6 +1,6 @@
 import * as THREE from 'three';
-import { createFirTree, createOakTree, createBirchTree } from './trees.js';
 import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
+import { createBirchTree, createFirTree, createOakTree } from './trees.js';
 
 const noise = createNoise2D();
 
@@ -12,7 +12,7 @@ export function generateTrees(island) {
         const y = (Math.random() - 0.5) * island.geometry.parameters.height;
 
         const noiseValue = noise(x * 0.1, y * 0.1);
-        const z = noiseValue * 10;
+        const z = 25;
 
         const distanceFromCenter = Math.sqrt(x * x + y * y);
         if (distanceFromCenter < island.geometry.parameters.width / 2) {
