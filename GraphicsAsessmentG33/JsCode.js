@@ -13,7 +13,25 @@ import { radius, scale, amplitude, steepness } from './island.js';
 
 var camera, scene, renderer, controls;
 var approximateFlatTopY = 10;
-
+const gui = new GUI();
+const params = {
+    amplitude: 3,
+    scale: 0.5,
+    graass: 50
+};
+var obj = { add:function(){ updateSeed(scene) }};
+gui.add(obj,'add').name('Randomize Seed');
+gui.add(params, 'amplitude', 0, 10).onChange(function(value){
+    mamplitude = params.amplitude;
+    reset();
+});
+gui.add(params, 'scale', 0, 3).onChange(function(value){
+    mscale = params.scale;
+    reset();
+});
+gui.add(params, 'graass', 0, 100).onChange(function(value){
+    reset();
+});
 init();
 animate();
 onWindowResize();
@@ -21,13 +39,10 @@ onWindowResize();
 
 
 
+
+
 function init() {
-    const gui = new GUI();
-    const params = {
-        amplitude: 3,
-        scale: 0.5,
-    };
-    
+
     //Add Scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x317ef5);
@@ -84,7 +99,7 @@ function init() {
 
     // Load multiple models randomly placed on the grass
     const modelNames = ['grass1.glb', 'grass2.glb', 'grass3.glb']; // Assuming names of models
-    const numberOfEachModel = 100; // Example: Place 5 of each model
+    var numberOfEachModel; // Example: Place 5 of each model
 
     modelNames.forEach(modelName => {
         for (let i = 0; i < numberOfEachModel; i++) {
@@ -178,6 +193,12 @@ function randomPositionOnGrass() {
 }
 
 
+function reset(){
+    while(scene.children.length > 0){ 
+        scene.remove(scene.children[0]); 
+    }
+    init();
+}
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
