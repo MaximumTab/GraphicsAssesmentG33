@@ -83,7 +83,7 @@ function updateLighting(scene, sun, moon) {
 function createDayNightSlider(scene) {
     const sliderContainer = document.createElement('div');
     sliderContainer.style.position = 'absolute';
-    sliderContainer.style.top = '140px';
+    sliderContainer.style.top = '170px';
     sliderContainer.style.right = '10px';
     document.body.appendChild(sliderContainer);
 
@@ -119,7 +119,7 @@ function createLightingToggleButton(scene) {
     const button = document.createElement('button');
     button.innerText = 'Enable Sun/Moon Lighting';
     button.style.position = 'absolute';
-    button.style.top = '175px';
+    button.style.top = '200px';
     button.style.right = '10px';
     button.style.background = 'black';
     button.style.color = 'white';
