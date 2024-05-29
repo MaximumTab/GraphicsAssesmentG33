@@ -9,10 +9,10 @@ let seed = 170803; //adjust on input for different island shapes
 let noise = createNoise2D(function() { return seededRandom(seed) }); //when using: noise = createNoise2D(function() { return seededRandom(seed) }); to update
 
 //island parameters 
-const radius = 25; //top island radius
-const scale = 15; //idk smth dont change too much tho
-const amplitude = 3; // function peaks
-const steepness = 30; //changes height inderectly how far the walls go up 
+export let radius = 25; //top island radius
+export let scale = 15; //idk smth dont change too much tho
+export let amplitude = 3; // function peaks
+export let steepness = 30; //changes height inderectly how far the walls go up 
 
 export function createIsland() {
     const material = new THREE.MeshPhongMaterial({ color: 0x808080, specular: 0x111111, shininess: 10});
