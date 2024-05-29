@@ -29,7 +29,10 @@ export function generateTrees(island) {
 
             tree.rotation.x = Math.PI / 2;
             tree.position.set(x, y, z);
+            tree.castShadow = true;
+            tree.receiveShadow = true;
             trees.add(tree);
+           
         }
     }
 
