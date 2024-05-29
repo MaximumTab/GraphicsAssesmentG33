@@ -7,7 +7,7 @@ const noise = createNoise2D();
 const mgeometry = new THREE.PlaneGeometry(10, 10, 100, 100);
 const mradius = 5;
 const mradiusSquared = mradius * mradius;
-const mscale = 1;
+const mscale = 0.5;
 const mamplitude = 3;
 
 // CreateMountain function
@@ -27,7 +27,10 @@ function CreateMountain() {
             // Calculate new z-value
             vertices[i + 2] = z - (depthFactor * mamplitude);
         } else {
-            vertices[i + 2] = -0.1; // Flatten the area outside the circle
+            // Remove vertices outside the range
+            vertices[i] = 0;
+            vertices[i + 1] = 0;
+            vertices[i + 2] = 0;
         }
     }
 
@@ -52,11 +55,11 @@ const fragmentShader = `
     varying float vHeight;
 
     void main() {
-        vec3 lowColor = vec3(0.0, 0.5, 0.0);  // Dark green
+        vec3 lowColor = vec3(0, 0, 0);  // Dark green
         vec3 highColor = vec3(1.0, 1.0, 1.0); // White
 
         // Adjust the mixFactor to extend the green range
-        float mixFactor = smoothstep(-3.0, 6.0, vHeight); // Adjusted range for a larger green side
+        float mixFactor = smoothstep(-3.0, 15.0, vHeight); // Adjusted range for a larger green side
         vec3 color = mix(lowColor, highColor, mixFactor);
 
         gl_FragColor = vec4(color, 1.0);
