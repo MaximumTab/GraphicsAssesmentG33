@@ -9,7 +9,6 @@ import { createGrass } from './grass.js';
 import { createIsland, updateSeed } from './island.js';
 import { createMountainMesh, mamplitude, mscale } from './mountain.js';
 import { createWaterBody, waterUniforms } from './pond.js';
-import { radius, scale, amplitude, steepness } from './island.js';
 
 var camera, scene, renderer, controls;
 var approximateFlatTopY = 10;
@@ -30,7 +29,6 @@ gui.add(params, 'scale', 0, 3).onChange(function(value){
     reset();
 });
 gui.add(params, 'graass', 0, 100).onChange(function(value){
-    numberOfEachModel = params.graass;
     reset();
 });
 var numberOfEachModel = 100;
@@ -39,7 +37,7 @@ animate();
 onWindowResize();
 
 
-
+const mountain = createMountainMesh();
 
 
 
@@ -49,16 +47,6 @@ function init() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x317ef5);
     var ratio = window.innerWidth / window.innerHeight;
-    var obj = { add:function(){ updateSeed(scene) }};
-
-    //GUI
-    gui.add(obj,'add').name('Randomize Seed');
-    gui.add(params, 'amplitude', 0, 10).onChange(function(value){
-        mamplitude = params.amplitude;
-    });
-    gui.add(params, 'scale', 0, 3).onChange(function(value){
-        mscale = params.scale;
-    });
 
 
     //Add Camera
@@ -83,7 +71,8 @@ function init() {
     createLightingToggleButton(scene);
     createSunAndMoon(scene);
     //Add island
-
+}
+function generateObjects(){
     const island = createIsland();  // Create island
     scene.add(island);  // Add island to the scene
     scene.island = island;
@@ -98,20 +87,6 @@ function init() {
    scene.add(grassRing);
 
     
-
-    // Load multiple models randomly placed on the grass
-    const modelNames = ['grass1.glb', 'grass2.glb', 'grass3.glb']; // Assuming names of models
-     // Example: Place 5 of each model
-
-    modelNames.forEach(modelName => {
-        for (let i = 0; i < numberOfEachModel; i++) {
-            let scale = 5; // Adjust scale based on your model specifics
-            loadModel(`./models/${modelName}`, scale, `${modelName}-${i}`);
-        }
-    });
-
-
-
     // Add Lighting
     const light = new THREE.DirectionalLight(0xffffff, 1);
     light.position.set(0, 100, 100);
@@ -148,19 +123,32 @@ function init() {
      }
      scene.add(clouds);
 
-     const mountain = createMountainMesh();
+     
      mountain.scale.set(1.7, 1.7, 1.7);
      mountain.position.set(-15, approximateFlatTopY + 15, 0);
      scene.add(mountain);
 
      //add grass:
+     grassGerenation();
+     
 
-     
-     
-
-    
-     
 }
+var grasses = [];
+function grassGerenation(){
+        // Load multiple models randomly placed on the grass
+        const modelNames = ['grass1.glb', 'grass2.glb', 'grass3.glb']; // Assuming names of models
+        // Example: Place 5 of each model
+   
+       modelNames.forEach(modelName => {
+           for (let i = 0; i < numberOfEachModel; i++) {
+               let scale = 5; // Adjust scale based on your model specifics
+               loadModel(`./models/${modelName}`, scale, `${modelName}-${i}`);
+           }
+       });
+}
+generateObjects();
+
+
 
 function loadModel(modelPath, scale, modelName) {
     const loader = new GLTFLoader();
@@ -178,6 +166,7 @@ function loadModel(modelPath, scale, modelName) {
         model.position.copy(randomPositionOnGrass());
         model.name = modelName; // Useful for debugging
         scene.add(model);
+        grasses.push(model);
     });
 }
 
@@ -196,10 +185,8 @@ function randomPositionOnGrass() {
 
 
 function reset(){
-    while(scene.children.length > 0){ 
-        scene.remove(scene.children[0]); 
-    }
-    init();
+    grasses.forEach(grass => scene.remove(grass));
+    grassGerenation();
 }
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
