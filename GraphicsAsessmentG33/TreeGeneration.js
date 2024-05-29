@@ -10,12 +10,10 @@ export function generateTrees(island) {
     for (let i = 0; i < 100; i++) {
         const x = (Math.random() - 0.5) * island.geometry.parameters.width;
         const y = (Math.random() - 0.5) * island.geometry.parameters.height;
-
-        const noiseValue = noise(x * 0.1, y * 0.1);
         const z = 25;
 
         const distanceFromCenter = Math.sqrt(x * x + y * y);
-        if (distanceFromCenter < island.geometry.parameters.width / 2) {
+        if (distanceFromCenter < island.geometry.parameters.width / 2 && 5 < distanceFromCenter) {
             let tree;
 
             const treeType = Math.random();
