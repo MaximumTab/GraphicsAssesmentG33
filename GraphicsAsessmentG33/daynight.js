@@ -81,20 +81,36 @@ function updateLighting(scene, sun, moon) {
 }
 
 function createDayNightSlider(scene) {
+    const sliderContainer = document.createElement('div');
+    sliderContainer.style.position = 'absolute';
+    sliderContainer.style.top = '140px';
+    sliderContainer.style.right = '10px';
+    document.body.appendChild(sliderContainer);
+
+    const sliderText = document.createElement('span');
+    sliderText.textContent = 'Time of Day Control   ';
+    sliderText.style.color = 'white';
+    sliderText.style.fontSize = '13px'; 
+    sliderText.style.fontFamily = 'Arial, sans-serif'; 
+    sliderContainer.appendChild(sliderText);
+
     const slider = document.createElement('input');
     slider.type = 'range';
     slider.min = 0;
     slider.max = 24;
     slider.value = 12;
     slider.step = 0.1;
-    slider.style.position = 'absolute';
-    slider.style.top = '10px';
-    slider.style.left = '10px';
+    slider.style.background = 'black';
+    slider.style.color = 'white';
+    slider.style.fontSize = '13px';
+    slider.style.fontFamily = 'Arial, sans-serif'; 
+    slider.setAttribute('aria-label', 'Time of Day Control');
+    sliderContainer.appendChild(slider);
+
     slider.addEventListener('input', function(event) {
         const timeOfDay = parseFloat(event.target.value);
         updateBackgroundColor(scene, timeOfDay);
     });
-    document.body.appendChild(slider);
 
     updateBackgroundColor(scene, 12);
 }
@@ -103,8 +119,13 @@ function createLightingToggleButton(scene) {
     const button = document.createElement('button');
     button.innerText = 'Enable Sun/Moon Lighting';
     button.style.position = 'absolute';
-    button.style.top = '40px';
-    button.style.left = '10px';
+    button.style.top = '175px';
+    button.style.right = '10px';
+    button.style.background = 'black';
+    button.style.color = 'white';
+    button.style.fontSize = '13px'; 
+    button.style.fontFamily = 'Arial, sans-serif'; 
+    button.setAttribute('aria-label', 'Toggle Sun/Moon Lighting');
     button.addEventListener('click', function() {
         useSunMoonLighting = !useSunMoonLighting;
         if (useSunMoonLighting) {
@@ -126,6 +147,7 @@ function createLightingToggleButton(scene) {
     });
     document.body.appendChild(button);
 }
+
 
 function disableOtherLights(scene) {
     scene.traverse(object => {
