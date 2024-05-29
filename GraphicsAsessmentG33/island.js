@@ -1,7 +1,8 @@
 import * as THREE from 'three';
-import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
-import  {seededRandom} from './meth/MathUtils.js';
+import { amplitude, scale } from './JsCode.js';
 import { generateTrees } from './TreeGeneration.js';
+import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
+import { seededRandom } from './meth/MathUtils.js';
 
 
 let sceneTemp;
@@ -10,8 +11,7 @@ let noise = createNoise2D(function() { return seededRandom(seed) }); //when usin
 
 //island parameters 
 export let radius = 25; //top island radius
-export let scale = 15; //idk smth dont change too much tho
-export let amplitude = 3; // function peaks
+
 export let steepness = 30; //changes height inderectly how far the walls go up 
 
 export function createIsland() {
