@@ -22,11 +22,13 @@ onWindowResize();
 
 function init() {
     const gui = new GUI();
+    
     //Add Scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x317ef5);
     var ratio = window.innerWidth / window.innerHeight;
-
+    var obj = { add:function(){ updateSeed(scene) }};
+    gui.add(obj,'add').name('Randomize Seed');
     //Add Camera
     camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
     camera.position.set(0, 15, 50); 
@@ -57,7 +59,6 @@ function init() {
     //Add Trees
     generateTrees(island);
 
-    document.getElementById('randomizeSeedButton').addEventListener('click', () => updateSeed(scene));
 
    // Add grass on the island
    const { grass, grassRing } = createGrass(island);
