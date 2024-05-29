@@ -1,13 +1,13 @@
 import * as THREE from 'three';
+import { numberofTrees } from './JsCode.js';
 import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
 import { createBirchTree, createFirTree, createOakTree } from './trees.js';
-
 const noise = createNoise2D();
 
 export function generateTrees(island) {
     const trees = new THREE.Group();
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < numberofTrees; i++) {
         const x = (Math.random() - 0.5) * island.geometry.parameters.width;
         const y = (Math.random() - 0.5) * island.geometry.parameters.height;
         const z = 25;

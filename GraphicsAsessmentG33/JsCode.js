@@ -7,31 +7,41 @@ import { createCloud } from './clouds.js';
 import { createDayNightSlider, createLightingToggleButton, createSunAndMoon } from './daynight.js';
 import { createGrass } from './grass.js';
 import { createIsland, updateSeed } from './island.js';
-import { createMountainMesh, mamplitude, mscale } from './mountain.js';
+import { createMountainMesh } from './mountain.js';
 import { createWaterBody, waterUniforms } from './pond.js';
 
 var camera, scene, renderer, controls;
+export let numberofTrees = 100;
+export let scale = 15; //idk smth dont change too much tho
+export let amplitude = 3; // function peaks
+var numberOfEachModel = 50;
 var approximateFlatTopY = 10;
 const gui = new GUI();
 const params = {
     amplitude: 3,
-    scale: 0.5,
-    graass: 50
+    scale: 15,
+    graass: 50,
+    numberofTrees: 100
 };
 var obj = { add:function(){ updateSeed(scene) }};
 gui.add(obj,'add').name('Randomize Seed');
 gui.add(params, 'amplitude', 0, 10).onChange(function(value){
-    mamplitude = params.amplitude;
+    amplitude = params.amplitude;
+    updateSeed(scene);
+});
+gui.add(params, 'scale', 0, 30).onChange(function(value){
+    scale = params.scale;
+    updateSeed(scene);
+});
+gui.add(params, 'graass', 0, 500).onChange(function(value){
+    numberOfEachModel = params.graass;
     reset();
 });
-gui.add(params, 'scale', 0, 3).onChange(function(value){
-    mscale = params.scale;
-    reset();
+gui.add(params, 'numberofTrees', 0, 500).onChange(function(value){
+    numberofTrees = params.numberofTrees;
+    updateSeed(scene);
 });
-gui.add(params, 'graass', 0, 100).onChange(function(value){
-    reset();
-});
-var numberOfEachModel = 100;
+
 init();
 animate();
 onWindowResize();
