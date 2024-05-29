@@ -29,8 +29,10 @@ gui.add(params, 'scale', 0, 3).onChange(function(value){
     reset();
 });
 gui.add(params, 'graass', 0, 100).onChange(function(value){
+    numberOfEachModel = params.graass;
     reset();
 });
+var numberOfEachModel = 100;
 init();
 animate();
 onWindowResize();
@@ -87,7 +89,7 @@ function init() {
 
     // Load multiple models randomly placed on the grass
     const modelNames = ['grass1.glb', 'grass2.glb', 'grass3.glb']; // Assuming names of models
-    var numberOfEachModel; // Example: Place 5 of each model
+     // Example: Place 5 of each model
 
     modelNames.forEach(modelName => {
         for (let i = 0; i < numberOfEachModel; i++) {
