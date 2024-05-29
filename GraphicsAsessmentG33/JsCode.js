@@ -1,3 +1,4 @@
+import { GUI } from 'dat.gui';
 import * as THREE from 'three';
 import { generateTrees } from './TreeGeneration.js';
 import { GLTFLoader } from './build/GLTFLoader.js';
@@ -16,7 +17,11 @@ init();
 animate();
 onWindowResize();
 
+
+
+
 function init() {
+    const gui = new GUI();
     //Add Scene
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x317ef5);

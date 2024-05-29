@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "simplex-noise": "^4.0.1"
+  },
+  "devDependencies": {
+    "dat.gui": "^0.7.9"
   }
 }
