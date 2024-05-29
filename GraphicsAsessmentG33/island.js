@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import { createNoise2D } from './build/simplex-noise/dist/esm/simplex-noise.js';
 import  {seededRandom} from './meth/MathUtils.js';
+import { generateTrees } from './TreeGeneration.js';
 
 
 let sceneTemp;
@@ -80,17 +81,19 @@ function flipFaces(geometry) {
 
 
 export function updateSeed(scene) {
-    seed = Math.floor(Math.random() * 10000);  //  new seed generator
+    seed = Math.floor(Math.random() * 10000);  // new seed generator
     noise = createNoise2D(function() { return seededRandom(seed) });  // Update noise function with new seed
     
-    const newIsland = createIsland(scene);  // Create a new island with updated noise
+    const island = createIsland(scene);  // Create a new island with updated noise
     
     if (scene.island) {
         scene.remove(scene.island);  // Remove the old island if it exists
     }
-    scene.island = newIsland;  // Reference the new island in the scene object for future updates
-    scene.add(newIsland);  // Add the new island to the scene
+    scene.island = island;  // Reference the new island in the scene object for future updates
+    scene.add(island);  // Add the new island to the scene
+    generateTrees(island);
 }
+
 
 
 
