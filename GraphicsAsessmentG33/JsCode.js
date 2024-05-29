@@ -9,6 +9,7 @@ import { createGrass } from './grass.js';
 import { createIsland, updateSeed } from './island.js';
 import { createMountainMesh, mamplitude, mscale } from './mountain.js';
 import { createWaterBody, waterUniforms } from './pond.js';
+import { radius, scale, amplitude, steepness } from './island.js';
 
 var camera, scene, renderer, controls;
 var approximateFlatTopY = 10;
@@ -48,6 +49,17 @@ function init() {
     scene = new THREE.Scene();
     scene.background = new THREE.Color(0x317ef5);
     var ratio = window.innerWidth / window.innerHeight;
+    var obj = { add:function(){ updateSeed(scene) }};
+
+    //GUI
+    gui.add(obj,'add').name('Randomize Seed');
+    gui.add(params, 'amplitude', 0, 10).onChange(function(value){
+        mamplitude = params.amplitude;
+    });
+    gui.add(params, 'scale', 0, 3).onChange(function(value){
+        mscale = params.scale;
+    });
+
 
     //Add Camera
     camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
