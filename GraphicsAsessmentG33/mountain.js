@@ -82,3 +82,5 @@ export function createMountainMesh() {
 
     return mountainMesh;
 }
+
+export { mamplitude, mscale };

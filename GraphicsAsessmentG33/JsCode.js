@@ -7,7 +7,7 @@ import { createCloud } from './clouds.js';
 import { createDayNightSlider, createLightingToggleButton, createSunAndMoon } from './daynight.js';
 import { createGrass } from './grass.js';
 import { createIsland, updateSeed } from './island.js';
-import { createMountainMesh } from './mountain.js';
+import { createMountainMesh, mamplitude, mscale } from './mountain.js';
 import { createWaterBody, waterUniforms } from './pond.js';
 
 var camera, scene, renderer, controls;
@@ -22,6 +22,10 @@ onWindowResize();
 
 function init() {
     const gui = new GUI();
+    const params = {
+        amplitude: 3,
+        scale: 0.5,
+    };
     
     //Add Scene
     scene = new THREE.Scene();
@@ -29,6 +33,12 @@ function init() {
     var ratio = window.innerWidth / window.innerHeight;
     var obj = { add:function(){ updateSeed(scene) }};
     gui.add(obj,'add').name('Randomize Seed');
+    gui.add(params, 'amplitude', 0, 10).onChange(function(value){
+        mamplitude = params.amplitude;
+    });
+    gui.add(params, 'scale', 0, 3).onChange(function(value){
+        mscale = params.scale;
+    });
     //Add Camera
     camera = new THREE.PerspectiveCamera(70, ratio, 0.1, 100000);
     camera.position.set(0, 15, 50); 
